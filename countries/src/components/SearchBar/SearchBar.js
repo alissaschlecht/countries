@@ -18,7 +18,7 @@ class SearchBar extends Component {
 		return (
 			<div>
 				<label>Search</label>
-				<input 
+				<input
 					type="text"
 					placeholder="search for a country"
 					onChange={event => this.setState({query: event.target.value})}
@@ -36,11 +36,5 @@ class SearchBar extends Component {
 		)
 	}
 }
-
-// const SearchBar = () => {
-// 	return (
-		
-// 	)
-// }
 
 export default SearchBar;

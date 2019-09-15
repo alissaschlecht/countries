@@ -1,49 +1,31 @@
 import React, { Component } from 'react';
+import { ReactComponent as Afghanistan } from "./assets/Afghanistan.svg"
 import './CountryImage.scss';
-import parse from 'html-react-parser';
-import countries from './Countries';
 
 
 class CountryImage extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			countries: countries
-		};
 	}
 
-	stringToSvg(svgString) {
-		const parser = new DOMParser();
-		console.log(this.state.countries);
-		let SVG = parser.parseFromString(svgString, "image/svg+xml");
-		console.log(SVG);
+	changeSvgSize() {
+		console.log('i was clicked');
 	}
 
 	render(){
-		const { countries } = this.state;
 		return (
 			<div>
-			<ol className="item">
-				{
-				countries.map(country => (
-					<li key={country.id} align="start">
-					<div>
-						<p className="title">{country.title}</p>
-						{parse(`${country.data}`)}
-					</div>
-					</li>
-				))
-				}
-			</ol>
+				<Afghanistan
+					className="someClassThatWillBeUsedInCSS"
+					alt="icon"
+					width="150px"
+					height="150px"
+					fill={this.props.selectedColor}
+				/>
 			</div>
 		)
 	}
 }
 
-// const CountryImage = () => {
-// 	return (
-
-// 	)
-// }
 
 export default CountryImage;
