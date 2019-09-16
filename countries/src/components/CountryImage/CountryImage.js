@@ -6,22 +6,37 @@ import './CountryImage.scss';
 class CountryImage extends Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			imgSize: '150px',
+		}
+
+		this.changeSvgSize = this.changeSvgSize.bind(this);
+		this.updateSize = this.updateSize.bind(this);
 	}
 
 	changeSvgSize() {
-		console.log('i was clicked');
+		console.log(this.props.imgSize);
+	    this.setState({imgSize: this.props.imgSize });
+	}
+
+	updateSize() {
+		this.setState({imgSize: '10px'});
+		console.log('updated size locally');
 	}
 
 	render(){
+		console.log(this.state.imgSize);
 		return (
 			<div>
 				<Afghanistan
 					className="someClassThatWillBeUsedInCSS"
+					id="sampleSVG"
 					alt="icon"
-					width="150px"
-					height="150px"
+					width={this.state.imgSize}
+					height={this.state.imgSize}
 					fill={this.props.selectedColor}
 				/>
+				<button onClick={this.updateSize}>try me locally</button>
 			</div>
 		)
 	}
