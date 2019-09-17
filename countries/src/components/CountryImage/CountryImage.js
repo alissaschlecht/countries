@@ -9,15 +9,7 @@ class CountryImage extends Component {
 		this.state = {
 			imgSize: '100px'
 		}
-
-		// this.changeSvgSize = this.changeSvgSize.bind(this);
 	}
-
-	// changeSvgSize() {
-	//     this.setState({imgSize: this.props.imgSize });
-	//     console.log('props ran');
-	// }
-
 
 	render(){
 		return (

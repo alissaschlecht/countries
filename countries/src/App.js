@@ -45,12 +45,20 @@ class App extends Component {
 
   createPNGFromSVG = () => {
     let _this = this;
-    let inputIMG = this.state.selectedCountries[0];
-    console.log(this.state.selectedCountries[0]);
+    // let inputIMG = _this.state.selectedCountries[0];
+    let inputIMG = require("./components/CountryImage/assets/Afghanistan.svg");
+    // console.log(_this.state.selectedCountries[0]);
+    // console.log('input', inputIMG);
+    // console.log(inputIMG);
+    // let inputIMG = "https://restcountries.eu/data/afg.svg"
+    // let inputIMG = document.getElementById("sampleSVG");
+    console.log('inputIMG', inputIMG);
+    
     convertFromInput(inputIMG, function(imgData){
       _this.setState({imgURL: imgData});
-      console.log('i ran');
+      console.log('this.state.imgURL', _this.state.imgURL);
     }, this.state.imgSize, this.state.imgSize);
+    // console.log('imgURL', this.state.imgURL);
   }
 
 	selectCountry = (event) => {
@@ -67,7 +75,8 @@ class App extends Component {
 
   render(){
     const { selectedImgSize } = this.state;
-    console.log(this.state.selectedCountries);
+    console.log('this.state', this.state.selectedCountries);
+    // console.log(document.getElementById("sampleSVG"));
 		return (
       <div className="App">
         <div className="container">
@@ -87,6 +96,8 @@ class App extends Component {
             </a>
             : null
           }
+
+          <img src="http://localhost:3000/public/Afganistan.svg" alt="afghan"/>
 
           <button onClick={this.createPNGFromSVG} style={{backgroundColor: "lightgray"}}>change to png in state</button>
         </div>
