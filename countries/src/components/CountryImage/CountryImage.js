@@ -7,7 +7,7 @@ class CountryImage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			imgSize: '150px',
+			imgSize: '550px'
 		}
 
 		this.changeSvgSize = this.changeSvgSize.bind(this);
@@ -15,7 +15,6 @@ class CountryImage extends Component {
 	}
 
 	changeSvgSize() {
-		console.log(this.props.imgSize);
 	    this.setState({imgSize: this.props.imgSize });
 	}
 
@@ -24,8 +23,9 @@ class CountryImage extends Component {
 		console.log('updated size locally');
 	}
 
+
+
 	render(){
-		console.log(this.state.imgSize);
 		return (
 			<div>
 				<Afghanistan
@@ -35,6 +35,7 @@ class CountryImage extends Component {
 					width={this.state.imgSize}
 					height={this.state.imgSize}
 					fill={this.props.selectedColor}
+					onClick={this.props.selectCountry}
 				/>
 				<button onClick={this.updateSize}>try me locally</button>
 			</div>

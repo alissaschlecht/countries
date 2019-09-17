@@ -1,55 +1,36 @@
-import React, { Component } from 'react';
+//es6 class to convert SVG to BASE64 for PNG download
+let canvas, imgPreview, canvasCtx;
 
+function _init() {
+  canvas = document.createElement("canvas");
+  imgPreview = document.createElement("img");
+  imgPreview.style = "position: absolute; top: -99999px";
 
-class SvgToPngConverter extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this._init = this._init.bind(this);
-    this._cleanUp = this._cleanUp.bind(this);
-    this.convertFromInput = this.convertFromInput.bind(this);
-  }
-
-
-  _init() {
-    this.canvas = document.createElement("canvas");
-    this.imgPreview = document.createElement("img");
-    this.imgPreview.style = "position: absolute; top: -9999px";
-
-    document.body.appendChild(this.imgPreview);
-    this.canvasCtx = this.canvas.getContext("2d");
-  }
-
-  _cleanUp() {
-    document.body.removeChild(this.imgPreview);
-  }
-
-  convertFromInput(input, callback) {
-    this._init();
-    let _this = this;
-    this.imgPreview.onload = function() {
-      const img = new Image();
-      _this.canvas.width = _this.imgPreview.clientWidth;
-      _this.canvas.height = _this.imgPreview.clientHeight;
-      img.crossOrigin = "anonymous";
-      img.src = _this.imgPreview.src;
-      img.onload = function() {
-        _this.canvasCtx.drawImage(img, 0, 0);
-        let imgData = _this.canvas.toDataURL("image/png");
-        if(typeof callback == "function"){
-            callback(imgData)
-        }
-        _this._cleanUp();
-      };
-    };
-
-    this.imgPreview.src = input;
-  }
-
-  render(){
-    return null
-  }
+  document.body.appendChild(imgPreview);
+  canvasCtx = canvas.getContext("2d");
 }
 
-export default SvgToPngConverter;
+function _cleanUp() {
+  document.body.removeChild(imgPreview);
+}
+
+export default function convertFromInput(input, callback, width = 50, height = 50) {
+  _init();
+  imgPreview.onload = function() {
+    const img = new Image();
+    canvas.width = width;
+    canvas.height = height;
+    img.crossOrigin = "anonymous";
+    img.src = imgPreview.src;
+    img.onload = function() {
+      canvasCtx.drawImage(img, 0, 0, imgPreview.clientWidth, imgPreview.clientHeight, 0, 0, width, height);
+      let imgData = canvas.toDataURL("image/png");
+      if(typeof callback == "function"){
+          callback(imgData)
+      }
+      _cleanUp();
+    };
+  };
+
+  imgPreview.src = input;
+}
