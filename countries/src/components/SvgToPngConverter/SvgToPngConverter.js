@@ -1,13 +1,16 @@
 //es6 class to convert SVG to BASE64 for PNG download
-let canvas, imgPreview, canvasCtx;
+let canvas, imgPreview, ctx, svgString, DOMURL;
 
 function _init() {
+  console.log('init running');
   canvas = document.createElement("canvas");
   imgPreview = document.createElement("img");
   imgPreview.style = "position: absolute; top: -99999px";
+  svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
+  DOMURL = window.self.URL || window.self.webkitURL || window.self;
 
   document.body.appendChild(imgPreview);
-  canvasCtx = canvas.getContext("2d");
+  ctx = canvas.getContext("2d");
 }
 
 function _cleanUp() {
@@ -16,33 +19,38 @@ function _cleanUp() {
 
 export default function convertFromInput(input, callback, width = 50, height = 50) {
   _init();
-  console.log('converting running');
   if(imgPreview) {
-    // let imgSrc = document.getElementById("sampleSVG");
-    console.log('onload running');
-    const img = new Image();
-    console.log('img brand new', img);
+    console.log('imgPreview');
+    let img = new Image();
+    let svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
+    let url = DOMURL.createObjectURL(svg);
     canvas.width = width;
     canvas.height = height;
-    console.log('canvas', canvas);
-    // img.src = imgPreview.src;
-    img.src = "http://localhost:3000/src/components/CountryImage/assets/Afghanistan.svg";
-    console.log('imgPreview', imgPreview);
-    console.log('img', img);
-    console.log('img.src', img.src);
-    if(img) {
-      console.log('onload running');
-      canvasCtx.drawImage(img, 0, 0, imgPreview.clientWidth, imgPreview.clientHeight, 0, 0, width, height);
-      console.log('img', img);
+    // img.crossOrigin = "anonymous";
+    img.src = url;
+    console.log('img.src', img)
+    // img.onload = function() {
+      ctx.drawImage(img, 0, 0, imgPreview.clientWidth, imgPreview.clientHeight, 0, 0, width, height);
       let imgData = canvas.toDataURL("image/png");
-      console.log('imgData', imgData);
+      console.log(canvas);
       if(typeof callback == "function"){
           callback(imgData)
       }
       _cleanUp();
-    };
-  }
+    // };
+  };
 
-  // console.log('input', input);
   imgPreview.src = input;
 }
+
+    // img.onload = function() {
+    //     ctx.drawImage(img, 0, 0, 300, 300, 0,0,300,300);
+    //     let png = canvas.toDataURL("image/png");
+    //     document.querySelector('#png-container').innerHTML = '<img src="'+png+'"/>';
+    //     _this.setState({
+    //       imgURL: png
+    //     });
+    //     console.log('_this.state.imgURL', _this.state.imgURL);
+    //     DOMURL.revokeObjectURL(png);
+    // };
+    // img.src = url;
