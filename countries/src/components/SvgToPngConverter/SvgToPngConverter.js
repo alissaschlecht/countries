@@ -1,53 +1,44 @@
-//es6 class to convert SVG to BASE64 for PNG download
-let canvas, imgPreview, ctx, svgString, DOMURL;
+export default function createPNGFromSVGAndDownload(svgElement, width, height, pngName) {
 
-function _init() {
-  canvas = document.createElement("canvas");
-  imgPreview = document.createElement("img");
+  const canvas = document.createElement('canvas');
+  const imgPreview = document.createElement('img');
   imgPreview.style = "position: absolute; top: -99999px";
-  // svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
-  // DOMURL = window.self.URL || window.self.webkitURL || window.self;
-
   document.body.appendChild(imgPreview);
-  ctx = canvas.getContext("2d");
-}
 
-function _cleanUp() {
-  document.body.removeChild(imgPreview);
-}
+  const ctx = canvas.getContext('2d');
+  const data = (new XMLSerializer()).serializeToString(document.querySelector(svgElement));
+  const DOMURL = window.URL || window.webkitURL || window;
 
-export default function convertFromInput(input, callback, width = 50, height = 50) {
-  _init();
-  if(imgPreview) {
-    let img = new Image();
-    // let svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
-    let url = DOMURL.createObjectURL(svg);
-    canvas.width = width;
-    canvas.height = height;
-    // img.crossOrigin = "anonymous";
-    img.src = url;
+  const img = new Image();
+  const svgBlob = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
+  const url = DOMURL.createObjectURL(svgBlob);
 
-    img.onload = function() {
-      ctx.drawImage(img, 0, 0, imgPreview.clientWidth, imgPreview.clientHeight, 0, 0, width, height);
-      let imgData = canvas.toDataURL("image/png");
-      if(typeof callback == "function"){
-          callback(imgData)
-      }
-      _cleanUp();
-    };
+  img.src = url;
+
+  canvas.width = width;
+  canvas.height = height;
+
+  img.onload = function () {
+    ctx.drawImage(img, 0, 0, imgPreview.clientWidth, imgPreview.clientHeight, 0, 0, width, height);
+    DOMURL.revokeObjectURL(url);
+
+    const imgURI = canvas
+        .toDataURL('image/png')
+        .replace('image/png', 'image/octet-stream');
+
+    const evt = new MouseEvent('click', {
+      view: window,
+      bubbles: false,
+      cancelable: true
+    });
+
+    const a = document.createElement('a');
+    a.setAttribute('download', pngName);
+    a.setAttribute('href', imgURI);
+    a.setAttribute('target', '_blank');
+
+    a.dispatchEvent(evt);
   };
 
-  imgPreview.src = input;
+  imgPreview.src = url;
 }
-
-    // img.onload = function() {
-    //     ctx.drawImage(img, 0, 0, 300, 300, 0,0,300,300);
-    //     let png = canvas.toDataURL("image/png");
-    //     document.querySelector('#png-container').innerHTML = '<img src="'+png+'"/>';
-    //     _this.setState({
-    //       imgURL: png
-    //     });
-    //     console.log('_this.state.imgURL', _this.state.imgURL);
-    //     DOMURL.revokeObjectURL(png);
-    // };
-    // img.src = url;
