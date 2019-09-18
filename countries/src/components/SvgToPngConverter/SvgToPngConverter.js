@@ -1,3 +1,6 @@
+import JSZip from 'jszip'; 
+import { saveAs } from 'file-saver';
+
 export default function createPNGFromSVGAndDownload(svgElement, width, height, pngName) {
 
   const canvas = document.createElement('canvas');
@@ -32,12 +35,25 @@ export default function createPNGFromSVGAndDownload(svgElement, width, height, p
       cancelable: true
     });
 
-    const a = document.createElement('a');
-    a.setAttribute('download', pngName);
-    a.setAttribute('href', imgURI);
-    a.setAttribute('target', '_blank');
+    var zip = new JSZip();
+    zip.file("Hello.txt", "Hello World\n");
 
-    a.dispatchEvent(evt);
+    var theImg = zip.folder("images");
+    theImg.file("smile.gif", pngName, {base64: true});
+
+    zip.generateAsync({type:"blob"}).then(function(content) {
+        // see FileSaver.js
+        saveAs(content, "example.zip");
+    });
+
+    console.log('im still running');
+
+    // const a = document.createElement('a');
+    // a.setAttribute('download', pngName);
+    // a.setAttribute('href', imgURI);
+    // a.setAttribute('target', '_blank');
+
+    // a.dispatchEvent(evt);
   };
 
   imgPreview.src = url;

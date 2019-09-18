@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
 // import logo from './logo.svg';
 import ColorPicker from './components/ColorPicker/ColorPicker';
-import Select from 'react-select';
+// import Select from 'react-select';
 // import SearchBar from './components/SearchBar/SearchBar';
 import CountryImage from './components/CountryImage/CountryImage';
 import createPNGFromSVGAndDownload from './components/SvgToPngConverter/SvgToPngConverter';
+import ReactHtmlParser, { convertNodeToElement } from 'react-html-parser';
 
 import './styles/App.scss';
 
-const options = [
-  { value: 25, label: 25 },
-  { value: 50, label: 50 },
-  { value: 100, label: 100 },
-  { value: 150, label: 150 },
-  { value: 250, label: 250 },
-  { value: 500, label: 500 },
-];
+// const options = [
+//   { value: 25, label: 25 },
+//   { value: 50, label: 50 },
+//   { value: 100, label: 100 },
+//   { value: 150, label: 150 },
+//   { value: 250, label: 250 },
+//   { value: 500, label: 500 },
+// ];
 
 class App extends Component {
   constructor(props) {
@@ -44,8 +45,8 @@ class App extends Component {
 
 	selectCountry = (event) => {
 		let ids = this.state.selectedCountries;
-		let clickedCountry = event.currentTarget;
-    let index = ids.indexOf(clickedCountry.id);
+		let clickedCountry = event.currentTarget.id;
+    let index = ids.indexOf(clickedCountry);
 
 		if(index === -1){
 			this.setState({selectedCountries : ids.concat([clickedCountry])});
@@ -56,9 +57,7 @@ class App extends Component {
 
   render(){
     const { selectedImgSize } = this.state;
-    console.log('this.state.imgURL', this.state.imgURL);
-    console.log('this.state', this.state.selectedCountries);
-    // console.log(document.getElementById("sampleSVG"));
+    console.log('ids after runs', this.state.selectedCountries);
 		return (
       <div className="App">
         <div className="container">
