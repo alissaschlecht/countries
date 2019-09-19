@@ -1,5 +1,3 @@
-import JSZip from 'jszip'; 
-import { saveAs } from 'file-saver';
 
 export default function createPNGFromSVGAndDownload(svgElement, width, height, pngName) {
 
@@ -9,7 +7,7 @@ export default function createPNGFromSVGAndDownload(svgElement, width, height, p
   document.body.appendChild(imgPreview);
 
   const ctx = canvas.getContext('2d');
-  const data = (new XMLSerializer()).serializeToString(document.querySelector(svgElement));
+  const data = (new XMLSerializer()).serializeToString(document.getElementById(svgElement).childNodes[0]);
   const DOMURL = window.URL || window.webkitURL || window;
 
   const img = new Image();
@@ -35,25 +33,12 @@ export default function createPNGFromSVGAndDownload(svgElement, width, height, p
       cancelable: true
     });
 
-    var zip = new JSZip();
-    zip.file("Hello.txt", "Hello World\n");
+    const a = document.createElement('a');
+    a.setAttribute('download', pngName);
+    a.setAttribute('href', imgURI);
+    a.setAttribute('target', '_blank');
 
-    var theImg = zip.folder("images");
-    theImg.file("smile.gif", pngName, {base64: true});
-
-    zip.generateAsync({type:"blob"}).then(function(content) {
-        // see FileSaver.js
-        saveAs(content, "example.zip");
-    });
-
-    console.log('im still running');
-
-    // const a = document.createElement('a');
-    // a.setAttribute('download', pngName);
-    // a.setAttribute('href', imgURI);
-    // a.setAttribute('target', '_blank');
-
-    // a.dispatchEvent(evt);
+    a.dispatchEvent(evt);
   };
 
   imgPreview.src = url;

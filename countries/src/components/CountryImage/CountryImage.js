@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import './CountryImage.scss';
-import countries from './Countries';
+import React from 'react';
 import ReactHtmlParser, { convertNodeToElement } from 'react-html-parser';
+import countries from './Countries';
+import './CountryImage.scss';
 
 //make sure svg props are correct syntax
 const transform = (node, index) => {
@@ -24,40 +24,18 @@ const transform = (node, index) => {
 
 //parse string into xml (html) for react
 let parsedCountryArray = countries.map((element, index) => {
-		element.data = ReactHtmlParser(element.data, { transform: transform })
-		return element;
+	element.data = ReactHtmlParser(element.data, { transform: transform })
+	return element;
 });
 
-class CountryImage extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			imgSize: '100px'
-		}
-	}
-
-	render(){
-		// const eachCountry = parsedCountryArray.map((item, key) => 
-		//     <li key={item.id}>{item.data[0]}</li>
-		// );
-		return (
-			<div>
-				{parsedCountryArray.map((item, key) => (
-			    <div className="countryContainer" id={item.title} onClick={this.props.selectCountry} key={item.id}>{item.data[0]}</div>
-				))}
-		    {/*{eachCountry}
-				<Afghanistan
-					className="someClassThatWillBeUsedInCSS"
-					id="sampleSVG"
-					alt="icon"
-					width={this.state.imgSize}
-					height={this.state.imgSize}
-					fill={this.props.selectedColor}
-					onClick={this.props.selectCountry}
-				/>*/}
-			</div>
-		)
-	}
+const CountryImage = (props) => {
+	return (
+		<div>
+			{parsedCountryArray.map((item, key) => (
+		    <div className="countryContainer" id={item.title} onClick={props.selectCountry} key={item.id}>{item.data[0]}</div>
+			))}
+		</div>
+	)
 }
 
 
