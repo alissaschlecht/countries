@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 // import logo from './logo.svg';
 import ColorPicker from './components/ColorPicker/ColorPicker';
 import Select from 'react-select';
-// import SearchBar from './components/SearchBar/SearchBar';
+import SearchBar from './components/SearchBar/SearchBar';
 import CountryImage from './components/CountryImage/CountryImage';
 import createPNGFromSVGAndDownload from './components/SvgToPngConverter/SvgToPngConverter';
+import parsedCountryArray from './components/XMLParser/XMLParser';
+import countries from './components/CountryImage/Countries';
 
 import './styles/App.scss';
 
@@ -79,12 +81,13 @@ class App extends Component {
   render(){
     const { selectedImgSize } = this.state;
     const { selectedFileType } = this.state;
-
+    console.log('parsedCountryArray', parsedCountryArray);
+    console.log('countries', countries);
 		return (
       <div className="App">
         <div className="container">
-          {/*<h1>Countries</h1>
-          <SearchBar />*/}
+          <h1>Countries</h1>
+          <SearchBar />
          <Select
             value={selectedFileType}
             onChange={this.changeFileType}

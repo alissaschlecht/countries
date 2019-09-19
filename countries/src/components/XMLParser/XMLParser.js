@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactHtmlParser, { convertNodeToElement } from 'react-html-parser';
-import countries from './Countries';
-import './CountryImage.scss';
+import countries from '../CountryImage/Countries';
 
 //make sure svg props are correct syntax
 const transform = (node, index) => {
@@ -23,21 +22,10 @@ const transform = (node, index) => {
 }
 
 //parse string into xml (html) for react
-let parsedCountryArray = countries.map((element, index) => {
-	element.data = ReactHtmlParser(element.data, { transform: transform })
+const parsedCountryArray = countries.map((element, index) => {
+	element.data = ReactHtmlParser(element.data, { transform: transform });
 	return element;
 });
+console.log(parsedCountryArray);
 
-const CountryImage = (props) => {
-  console.log(parsedCountryArray[0].data[0]);
-	return (
-		<div>
-			{parsedCountryArray.map((item, key) => (
-		    <div className="countryContainer" id={item.title} onClick={props.selectCountry} key={item.id}>{item.data[0]}</div>
-			))}
-		</div>
-	)
-}
-
-
-export default CountryImage;
+export default parsedCountryArray;
