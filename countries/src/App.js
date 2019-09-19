@@ -50,6 +50,10 @@ class App extends Component {
     this.setState({
       color: color
     });
+    const svgCollection = document.querySelectorAll(".countryContainer svg");
+    const svgArray = Array.from(svgCollection);
+    console.log(svgArray);
+    return svgArray.map(svg => svg.setAttribute("fill", this.state.color));
   }
 
 	selectCountry = (event) => {
@@ -85,13 +89,11 @@ class App extends Component {
             value={selectedFileType}
             onChange={this.changeFileType}
             options={fileOptions}
-            style={{backgroundColor: "red"}}
           />
          <Select
             value={selectedImgSize}
             onChange={this.changeSvgSize}
             options={sizeOptions}
-            style={{backgroundColor: "red"}}
           />
           <CountryImage selectedColor={this.state.color} selectCountry={this.selectCountry} />
           <ColorPicker updateColor={this.updateColor} />
