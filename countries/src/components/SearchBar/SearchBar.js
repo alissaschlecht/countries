@@ -5,13 +5,6 @@ import './SearchBar.scss';
 class SearchBar extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			query: ''
-		}
-	}
-
-	search() {
-		console.log('search', this.state.query);
 	}
 
 	render(){
@@ -20,16 +13,11 @@ class SearchBar extends Component {
 				<label>Search</label>
 				<input
 					type="text"
-					placeholder="search for a country"
-					onChange={event => this.setState({query: event.target.value})}
-					onKeyPress={event => {
-							if (event.key === 'Enter') {
-								this.search();
-							}
-						}
-					}
+					placeholder="Search for a country"
+					onChange={ this.props.query }
+					onKeyPress={ this.props.search }
 				/>
-				<button onClick={() => this.search()}>
+				<button onClick={this.props.search}>
 					Search
 				</button>
 			</div>

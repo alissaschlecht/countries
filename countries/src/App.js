@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 // import logo from './logo.svg';
 import ColorPicker from './components/ColorPicker/ColorPicker';
 import Select from 'react-select';
-// import SearchBar from './components/SearchBar/SearchBar';
-import CountryImage from './components/CountryImage/CountryImage';
+import SearchBar from './components/SearchBar/SearchBar';
+// import CountryImage from './components/CountryImage/CountryImage';
+import ReactHtmlParser, { convertNodeToElement } from 'react-html-parser';
 import createPNGFromSVGAndDownload from './components/SvgToPngConverter/SvgToPngConverter';
-
+import countries from './components/CountryImage/Countries';
 import './styles/App.scss';
 
 const sizeOptions = [
@@ -29,13 +30,17 @@ class App extends Component {
       imgSize: 200,
       fileType: 'SVG',
       color: "#333333",
-      selectedCountries: []
+      selectedCountries: [],
+      query: '',
+      matchingCountries: []
     }
 
     this.updateColor = this.updateColor.bind(this);
     this.changeSvgSize = this.changeSvgSize.bind(this);
     this.changeFileType = this.changeFileType.bind(this);
     this.selectCountry = this.selectCountry.bind(this);
+    this.query = this.query.bind(this);
+    this.search = this.search.bind(this);
   }
 
   changeSvgSize = selectedImgSize => {
@@ -46,14 +51,22 @@ class App extends Component {
     this.setState({ fileType: selectedFileType.value });
   };
 
-  updateColor = (color) => {
+  updateColor = color => {
     this.setState({
       color: color
     });
     const svgCollection = document.querySelectorAll(".countryContainer svg");
     const svgArray = Array.from(svgCollection);
-    console.log(svgArray);
     return svgArray.map(svg => svg.setAttribute("fill", this.state.color));
+  }
+
+  search() {
+    const countriesArray = countries.filter(country => country.title.includes(this.state.query));
+    this.setState( { matchingCountries : countriesArray } );
+  }
+
+  query(event) {
+    this.setState( { query : event.target.value } );
   }
 
 	selectCountry = (event) => {
@@ -69,7 +82,6 @@ class App extends Component {
 	}
 
  generateFiles = () => {
-  console.log(this.state.fileType);
    this.state.selectedCountries.map((value, index) => {
      createPNGFromSVGAndDownload(value, `${value}.${this.state.fileType}`, this.state.fileType, this.state.imgSize, this.state.imgSize);
      return null;
@@ -80,11 +92,45 @@ class App extends Component {
     const { selectedImgSize } = this.state;
     const { selectedFileType } = this.state;
 
+    //make sure svg props are correct syntax
+    const transform = (node, index) => {
+      if (node.type === 'tag' && node.name === 'svg') {
+        const child = node.children[0];
+        const { width, height, viewbox, preserveaspectratio } = node.attribs;
+        return (
+          <svg
+            key={index}
+            width={width}
+            height={height}
+            viewBox={viewbox}
+            preserveAspectRatio={preserveaspectratio}
+          >
+            {convertNodeToElement(child, index, transform)}
+          </svg>
+        );
+      }
+    }
+    //parse string into xml (html) for react
+
+    const parsedCountryArray = countries.map((element, index) => {
+      console.log('element.data', element.data);
+      if (typeof element.data === Object){
+        element.data = ReactHtmlParser(element.data, { transform: transform })
+      }
+      console.log('element.data', element.data);
+      console.log('typeof', typeof element.data);
+      return element;
+    });
+
+    // console.log('parsedCountryArray', parsedCountryArray);
 		return (
       <div className="App">
         <div className="container">
-          {/*<h1>Countries</h1>
-          <SearchBar />*/}
+          <h1>Countries</h1>
+          <SearchBar 
+            search={this.search}
+            query={this.query}
+          />
          <Select
             value={selectedFileType}
             onChange={this.changeFileType}
@@ -95,7 +141,11 @@ class App extends Component {
             onChange={this.changeSvgSize}
             options={sizeOptions}
           />
-          <CountryImage selectedColor={this.state.color} selectCountry={this.selectCountry} />
+
+          {parsedCountryArray.map((item, key) => (
+            <div className="countryContainer" id={item.title} onClick={this.selectCountry} key={item.id}>{item.data[0]}</div>
+          ))}
+          {/* <CountryImage selectedColor={this.state.color} selectCountry={this.selectCountry} /> */}
           <ColorPicker updateColor={this.updateColor} />
 
           <button onClick={this.generateFiles}>
