@@ -15,7 +15,7 @@ const transform = (node, index) => {
         height={height}
         viewBox={viewbox}
         preserveAspectRatio={preserveaspectratio}
-        fill={fill}
+        fill={'#333'}
       >
         {convertNodeToElement(child, index, transform)}
       </svg>
@@ -25,8 +25,8 @@ const transform = (node, index) => {
 
 //parse string into xml (html) for react
 let parsedCountryArray = countries.map((element, index) => {
-	element.data = ReactHtmlParser(element.data, { transform: transform });
-  console.log(element.data[0]);
+	element.data = ReactHtmlParser(element.data, { transform: transform })
+  console.log(element.data[0])
 	return element;
 });
 
@@ -34,7 +34,7 @@ const CountryImage = (props) => {
 	return (
 		<div>
 			{parsedCountryArray.map((item, key) => (
-		    <div className="countryContainer" id={item.title} onClick={props.selectCountry} key={item.id}>{item.data[0]}</div>
+		    <div className="countryContainer" id={item.title} style={{color: props.selectedColor}} onClick={props.selectCountry} key={item.id}>{item.data[0]}</div>
 			))}
 		</div>
 	)

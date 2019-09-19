@@ -1,18 +1,5 @@
 
-export default function createPNGFromSVGAndDownload(svgElement, imgName, fileType, color, width, height) {
-
-
-
-// var svgData = $("#figureSvg")[0].outerHTML;
-// var svgBlob = new Blob([svgData], {type:"image/svg+xml;charset=utf-8"});
-// var svgUrl = URL.createObjectURL(svgBlob);
-// var downloadLink = document.createElement("a");
-// downloadLink.href = svgUrl;
-// downloadLink.download = "newesttree.svg";
-// document.body.appendChild(downloadLink);
-// downloadLink.click();
-// document.body.removeChild(downloadLink);
-// // https://stackoverflow.com/questions/23218174/how-do-i-save-export-an-svg-file-after-creating-an-svg-with-d3-js-ie-safari-an
+export default function createPNGFromSVGAndDownload(svgElement, imgName, fileType, width, height) {
 
   //needed for both svg & png
   const data = (new XMLSerializer()).serializeToString(document.getElementById(svgElement).childNodes[0]);
@@ -20,7 +7,7 @@ export default function createPNGFromSVGAndDownload(svgElement, imgName, fileTyp
   const DOMURL = window.URL || window.webkitURL || window;
   const url = DOMURL.createObjectURL(svgBlob);
 
-  //download collected images
+  //download selected image
   const downloadImagesEvent = function (imgURI) {
     const evt = new MouseEvent('click', {
       view: window,
@@ -35,8 +22,8 @@ export default function createPNGFromSVGAndDownload(svgElement, imgName, fileTyp
     a.dispatchEvent(evt);
   }
 
+  //create canvas and draw png, then download
   if(fileType === 'PNG') {
-    console.log('should download pngs');
     const canvas = document.createElement('canvas');
     const imgPreview = document.createElement('img');
     imgPreview.style = "position: absolute; top: -99999px";
@@ -44,8 +31,7 @@ export default function createPNGFromSVGAndDownload(svgElement, imgName, fileTyp
     const ctx = canvas.getContext('2d');
     const img = new Image();
     img.src = url;
-    img.style = "color: color";
-    console.log(img);
+
     canvas.width = width;
     canvas.height = height;
 
@@ -63,7 +49,7 @@ export default function createPNGFromSVGAndDownload(svgElement, imgName, fileTyp
 
     imgPreview.src = url;
   } else {
-    console.log('should download svgs');
+    //just download for svg with url blob
     downloadImagesEvent(url);
   }
 }
