@@ -7,7 +7,7 @@ import './CountryImage.scss';
 const transform = (node, index) => {
   if (node.type === 'tag' && node.name === 'svg') {
     const child = node.children[0];
-    const { width, height, viewbox, preserveaspectratio } = node.attribs;
+    const { width, height, viewbox, preserveaspectratio, fill } = node.attribs;
     return (
       <svg
         key={index}
@@ -15,6 +15,7 @@ const transform = (node, index) => {
         height={height}
         viewBox={viewbox}
         preserveAspectRatio={preserveaspectratio}
+        fill={fill}
       >
         {convertNodeToElement(child, index, transform)}
       </svg>
@@ -24,7 +25,8 @@ const transform = (node, index) => {
 
 //parse string into xml (html) for react
 let parsedCountryArray = countries.map((element, index) => {
-	element.data = ReactHtmlParser(element.data, { transform: transform })
+	element.data = ReactHtmlParser(element.data, { transform: transform });
+  console.log(element.data[0]);
 	return element;
 });
 

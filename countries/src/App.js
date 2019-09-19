@@ -5,11 +5,10 @@ import Select from 'react-select';
 // import SearchBar from './components/SearchBar/SearchBar';
 import CountryImage from './components/CountryImage/CountryImage';
 import createPNGFromSVGAndDownload from './components/SvgToPngConverter/SvgToPngConverter';
-import ReactHtmlParser, { convertNodeToElement } from 'react-html-parser';
 
 import './styles/App.scss';
 
-const options = [
+const sizeOptions = [
   { value: 25, label: 25 },
   { value: 50, label: 50 },
   { value: 100, label: 100 },
@@ -18,30 +17,38 @@ const options = [
   { value: 500, label: 500 },
 ];
 
+const fileOptions = [
+  { value: 'PNG', label: 'PNG' },
+  { value: 'SVG', label: 'SVG' },
+];
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       imgSize: 200,
-      countryColor: "#333333",
+      fileType: 'SVG',
+      color: "#333333",
       selectedCountries: []
     }
 
     this.updateColor = this.updateColor.bind(this);
     this.changeSvgSize = this.changeSvgSize.bind(this);
+    this.changeFileType = this.changeFileType.bind(this);
     this.selectCountry = this.selectCountry.bind(this);
-    this.generateFiles = this.generateFiles.bind(this);
   }
 
   changeSvgSize = selectedImgSize => {
     this.setState({ imgSize: selectedImgSize.value });
-    console.log(`Option selected:`, selectedImgSize);
-    console.log(`state:`, this.state.imgSize);
+  };
+
+  changeFileType = selectedFileType => {
+    this.setState({ fileType: selectedFileType.value });
   };
 
   updateColor = (color) => {
     this.setState({
-      countryColor: color
+      color: color
     });
   }
 
@@ -58,14 +65,16 @@ class App extends Component {
 	}
 
  generateFiles = () => {
+  console.log(this.state.fileType);
    this.state.selectedCountries.map((value, index) => {
-     createPNGFromSVGAndDownload(value, this.state.imgSize, this.state.imgSize, `${value}.png`);
+     createPNGFromSVGAndDownload(value, `${value}.${this.state.fileType}`, this.state.fileType, this.state.imgSize, this.state.imgSize);
+     return null;
    });
  }
 
   render(){
     const { selectedImgSize } = this.state;
-    console.log('ids after runs', this.state.selectedCountries);
+    const { selectedFileType } = this.state;
 
 		return (
       <div className="App">
@@ -73,12 +82,18 @@ class App extends Component {
           {/*<h1>Countries</h1>
           <SearchBar />*/}
          <Select
-            value={selectedImgSize}
-            onChange={this.changeSvgSize}
-            options={options}
+            value={selectedFileType}
+            onChange={this.changeFileType}
+            options={fileOptions}
             style={{backgroundColor: "red"}}
           />
-          <CountryImage selectedColor={this.state.countryColor} selectCountry={this.selectCountry} style={{width: '100px'}} />
+         <Select
+            value={selectedImgSize}
+            onChange={this.changeSvgSize}
+            options={sizeOptions}
+            style={{backgroundColor: "red"}}
+          />
+          <CountryImage selectedColor={this.state.color} selectCountry={this.selectCountry} />
           <ColorPicker updateColor={this.updateColor} />
 
           <button onClick={this.generateFiles}>
