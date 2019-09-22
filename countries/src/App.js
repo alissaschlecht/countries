@@ -40,7 +40,7 @@ class App extends Component {
     this.changeFileType = this.changeFileType.bind(this);
     this.selectCountry = this.selectCountry.bind(this);
     this.query = this.query.bind(this);
-    this.search = this.search.bind(this);
+    this.transform = this.transform.bind(this);
   }
 
   changeSvgSize = selectedImgSize => {
@@ -60,96 +60,93 @@ class App extends Component {
     return svgArray.map(svg => svg.setAttribute("fill", this.state.color));
   }
 
-  search() {
-    // const countriesArray = countries.filter(country => country.title.includes(this.state.query));
-    // this.setState( { matchingCountries : countriesArray } );
-  }
-
   query(event) {
     this.setState( { query : event.target.value } );
     console.log('event', event);
   }
 
-	selectCountry = (event) => {
-		let ids = this.state.selectedCountries;
-		let clickedCountry = event.currentTarget.id;
+  selectCountry = (event) => {
+    let ids = this.state.selectedCountries;
+    let clickedCountry = event.currentTarget.id;
     let index = ids.indexOf(clickedCountry);
 
-		if(index === -1){
-			this.setState({selectedCountries : ids.concat([clickedCountry])});
-		} else {
-	    this.setState({selectedCountries: ids.filter(id => id !== clickedCountry) });
-		}
-	}
+    if(index === -1){
+      this.setState({selectedCountries : ids.concat([clickedCountry])});
+    } else {
+      this.setState({selectedCountries: ids.filter(id => id !== clickedCountry) });
+    }
+  }
 
- generateFiles = () => {
-   this.state.selectedCountries.map((value, index) => {
-     createPNGFromSVGAndDownload(value, `${value}.${this.state.fileType}`, this.state.fileType, this.state.imgSize, this.state.imgSize);
-     return null;
-   });
- }
+  generateFiles = () => {
+    this.state.selectedCountries.map((value, index) => {
+      createPNGFromSVGAndDownload(value, `${value}.${this.state.fileType}`, this.state.fileType, this.state.imgSize, this.state.imgSize);
+      return null;
+    });
+  }
+
+  //make sure svg props are correct syntax
+  transform = (node, index) => {
+    if (node.type === 'tag' && node.name === 'svg') {
+      const child = node.children[0];
+      const { width, height, viewbox, preserveaspectratio } = node.attribs;
+      return (
+        <svg
+        key={index}
+        width={width}
+        height={height}
+        viewBox={viewbox}
+        preserveAspectRatio={preserveaspectratio}
+        >
+        {convertNodeToElement(child, index, this.transform)}
+        </svg>
+      );
+    }
+  }
 
   render(){
     const { selectedImgSize } = this.state;
     const { selectedFileType } = this.state;
 
-    //make sure svg props are correct syntax
-    const transform = (node, index) => {
-      if (node.type === 'tag' && node.name === 'svg') {
-        const child = node.children[0];
-        const { width, height, viewbox, preserveaspectratio } = node.attribs;
-        return (
-          <svg
-            key={index}
-            width={width}
-            height={height}
-            viewBox={viewbox}
-            preserveAspectRatio={preserveaspectratio}
-          >
-            {convertNodeToElement(child, index, transform)}
-          </svg>
-        );
-      }
-    }
-    
+
+
     //parse string into xml (html) for react
     const parsedCountryArray = countries.map((element, index) => {
       const newElement = {
         ...element,
-        data: ReactHtmlParser(element.data, { transform: transform })
+        data: ReactHtmlParser(element.data, { transform: this.transform })
       }
       return newElement;
     });
 
-		return (
+    return (
       <div className="App">
-        <div className="container">
-          <h1>Countries</h1>
-          <SearchBar
-            query={this.query}
-            value={this.state.query}
-          />
-         <Select
-            value={selectedFileType}
-            onChange={this.changeFileType}
-            options={fileOptions}
-          />
-         <Select
-            value={selectedImgSize}
-            onChange={this.changeSvgSize}
-            options={sizeOptions}
-          />
+      <div className="container">
+      <h1>Countries</h1>
+      <SearchBar
+      query={this.query}
+      value={this.state.query}
+      />
+      <Select
+      value={selectedFileType}
+      onChange={this.changeFileType}
+      options={fileOptions}
+      />
+      <Select
+      value={selectedImgSize}
+      onChange={this.changeSvgSize}
+      options={sizeOptions}
+      />
 
-          {parsedCountryArray.filter(country => country.title.includes(this.state.query)).map((item, key) => (
-            <div className="countryContainer" id={item.title} onClick={this.selectCountry} key={item.id}>{item.data[0]}</div>
-          ))}
-          {/* <CountryImage selectedColor={this.state.color} selectCountry={this.selectCountry} /> */}
-          <ColorPicker updateColor={this.updateColor} />
+      {parsedCountryArray.filter(country => country.title.includes(this.state.query)).map((item, key) => (
+        <div className="countryContainer" id={item.title} onClick={this.selectCountry} key={item.id}>{item.data[0]}</div>
+      ))}
+      {/* <CountryImage selectedColor={this.state.color} selectCountry={this.selectCountry} /> */}
+      <ColorPicker updateColor={this.updateColor} />
 
-          <button onClick={this.generateFiles}>
-            download
-          </button>
-        </div>
+      <button onClick={this.generateFiles}>
+      download
+      </button>
+      </div>
       </div>
     );
   }
