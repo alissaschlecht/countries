@@ -61,12 +61,13 @@ class App extends Component {
   }
 
   search() {
-    const countriesArray = countries.filter(country => country.title.includes(this.state.query));
-    this.setState( { matchingCountries : countriesArray } );
+    // const countriesArray = countries.filter(country => country.title.includes(this.state.query));
+    // this.setState( { matchingCountries : countriesArray } );
   }
 
   query(event) {
     this.setState( { query : event.target.value } );
+    console.log('event', event);
   }
 
 	selectCountry = (event) => {
@@ -110,26 +111,23 @@ class App extends Component {
         );
       }
     }
+    
     //parse string into xml (html) for react
-
     const parsedCountryArray = countries.map((element, index) => {
-      console.log('element.data', element.data);
-      if (typeof element.data === Object){
-        element.data = ReactHtmlParser(element.data, { transform: transform })
+      const newElement = {
+        ...element,
+        data: ReactHtmlParser(element.data, { transform: transform })
       }
-      console.log('element.data', element.data);
-      console.log('typeof', typeof element.data);
-      return element;
+      return newElement;
     });
 
-    // console.log('parsedCountryArray', parsedCountryArray);
 		return (
       <div className="App">
         <div className="container">
           <h1>Countries</h1>
-          <SearchBar 
-            search={this.search}
+          <SearchBar
             query={this.query}
+            value={this.state.query}
           />
          <Select
             value={selectedFileType}
@@ -142,7 +140,7 @@ class App extends Component {
             options={sizeOptions}
           />
 
-          {parsedCountryArray.map((item, key) => (
+          {parsedCountryArray.filter(country => country.title.includes(this.state.query)).map((item, key) => (
             <div className="countryContainer" id={item.title} onClick={this.selectCountry} key={item.id}>{item.data[0]}</div>
           ))}
           {/* <CountryImage selectedColor={this.state.color} selectCountry={this.selectCountry} /> */}

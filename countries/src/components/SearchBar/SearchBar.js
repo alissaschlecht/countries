@@ -13,9 +13,9 @@ class SearchBar extends Component {
 				<label>Search</label>
 				<input
 					type="text"
+					value={ this.props.value }
 					placeholder="Search for a country"
 					onChange={ this.props.query }
-					onKeyPress={ this.props.search }
 				/>
 				<button onClick={this.props.search}>
 					Search
