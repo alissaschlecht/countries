@@ -116,7 +116,6 @@ class App extends Component {
   render(){
     const { selectedImgSize } = this.state;
     const { selectedFileType } = this.state;
-    console.log('selectedCountries', this.state.selectedCountries);
 
     //parse string into xml (html) for react
     const parsedCountryArray = countries.map((element, index) => {
@@ -167,7 +166,7 @@ class App extends Component {
           <div className="optionsBlock">
             <h3>Download</h3>
             <ColorPicker updateColor={this.updateColor} />
-            <div class="selectContainer">
+            <div className="selectContainer">
               <Select
                 value={selectedFileType}
                 onChange={this.changeFileType}
@@ -177,7 +176,7 @@ class App extends Component {
               />
               <label>File Type</label>
             </div>
-            <div class="selectContainer">
+            <div className="selectContainer">
               <Select
                 value={selectedImgSize}
                 onChange={this.changeSvgSize}
