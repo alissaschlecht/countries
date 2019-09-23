@@ -1,16 +1,45 @@
 @import "../../styles/base/colors";
 
+	input[type=checkbox] {
+		-webkit-appearance: none;
+		-moz-appearance: none;
+	}
 
-.searchField {
-	label {
-	    display: inline-block;
+	input[type=checkbox]::-ms-check {
+		display: none;
 	}
-	.searchInput {
-		width: 100%;
-		height: 60px;
-		border-radius: 3px;
+	input[type=checkbox] {
+		position: relative;
+		width: 20px;
+		height: 20px;
 		border: 1px solid $gray-1;
-		padding: 20px;
-		font-size: 18px;
+		border-radius: 3px;
+		/* Adjusts the position of the checkboxes on the text baseline */ 
+		vertical-align: -2px;
+		/* Set here so that Windows' High-Contrast Mode can override */
+		color: $black;
 	}
-}
+
+	input[type=checkbox]::before {
+		content: "✔";
+		position: absolute;
+		font-size: 18px;
+		right: 0;
+		top: 0;
+		visibility: hidden;
+	}
+
+	input[type=checkbox]:checked::before {
+		/* Use `visibility` instead of `display` to avoid recalculating layout */
+		visibility: visible;
+	}
+
+	input[type=checkbox]:disabled {
+		border-color: black;
+		background: #ddd;
+		color: gray;
+	}
+
+	span {
+		margin-left: 4px;
+	}

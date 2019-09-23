@@ -1,23 +1,9 @@
 import React, { Component } from 'react';
-import './SearchBar.scss';
+import './CheckBox.scss';
 
 
-class Checkbox extends Component {
-  render() {
-    const isChecked = this.props;
+const CheckBox = props => (
+  <input type="checkbox" {...props} />
+)
 
-    return (
-      <label>
-        <input
-			name="selectAllCountries"
-			type="checkbox"
-			checked={isChecked}
-			onChange={this.props.toggleAllCountries}
-        />
-        Select all
-      </label>
-    );
-  }
-}
-
-export default SearchBar;
+export default CheckBox;

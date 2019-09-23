@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
-import ColorPicker from './components/ColorPicker/ColorPicker';
 import Select from 'react-select';
+import ColorPicker from './components/ColorPicker/ColorPicker';
 import SearchBar from './components/SearchBar/SearchBar';
-// import CountryImage from './components/CountryImage/CountryImage';
+import CheckBox from './components/CheckBox/CheckBox';
 import ReactHtmlParser, { convertNodeToElement } from 'react-html-parser';
 import createPNGFromSVGAndDownload from './components/SvgToPngConverter/SvgToPngConverter';
 import countries from './components/CountryImage/Countries';
@@ -139,14 +138,16 @@ class App extends Component {
                 value={this.state.query}
               />
             </div>
-            <label>
-              <input
-                name="selectAllCountries"
-                type="checkbox"
-                onChange={this.toggleAllCountries}
-              />
-              Select all
-            </label>
+            <div className="checkBoxContainer">
+              <label >
+                <CheckBox
+                  name="selectAllCountries"
+                  type="checkbox"
+                  onChange={this.toggleAllCountries}
+                />
+                <span>Select all</span>
+              </label>
+            </div>
             <div className="countryBlock">
               {parsedCountryArray.filter(country => country.title.includes(this.state.query)).map((item, key) => (
                 <div 
