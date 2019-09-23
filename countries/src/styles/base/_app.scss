@@ -1,0 +1,75 @@
+.App {
+  width: 100%;
+  * {
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+  }
+  .container {
+  	max-width: 1200px;
+  	margin: 0 auto;
+  	padding: 20px;
+  	margin-top: 100px;
+  	display: flex;
+  	.leftContainer {
+  		width: 75%;
+  		padding: 20px;
+  		.countryBlock {
+  			display: flex;
+  			flex-wrap: wrap;
+  			margin: 20px -20px;
+	  		.countryContainer {
+				width: 200px;
+				height: 200px;
+				margin: 20px;
+				padding-top: 20px;
+				box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+				position: relative;
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				justify-content: center;
+				transition: all .3s;
+				&:hover {
+					box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.3);
+					.countryName {
+						color: $black;
+					}
+				}
+				&.checked {
+					background-color: $gray-2;
+					.countryName {
+						color: $black;
+					}
+					.checked {
+						display: block;
+					}
+				}
+				.countryName {
+					text-align: center;
+					color: $gray-1;
+					width: 100%;
+					text-transform: uppercase;
+				}
+				svg {
+					width: 100px;
+					height: 100px;
+				}
+				.checked {
+					position: absolute;
+					width: 20px;
+					display: none;
+					right: 10px;
+					top: 10px;
+				}
+			}
+
+  		}
+
+  	}
+  	.optionsBlock {
+  		width: 25%;
+  		padding: 20px;
+  	}
+  }
+}

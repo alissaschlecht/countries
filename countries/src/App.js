@@ -7,6 +7,7 @@ import SearchBar from './components/SearchBar/SearchBar';
 import ReactHtmlParser, { convertNodeToElement } from 'react-html-parser';
 import createPNGFromSVGAndDownload from './components/SvgToPngConverter/SvgToPngConverter';
 import countries from './components/CountryImage/Countries';
+import checkCircle from './images/check-circle.svg';
 import './styles/App.scss';
 
 const sizeOptions = [
@@ -30,9 +31,8 @@ class App extends Component {
       imgSize: 200,
       fileType: 'SVG',
       color: "#333333",
-      selectedCountries: [],
       query: '',
-      matchingCountries: []
+      selectedCountries: []
     }
 
     this.updateColor = this.updateColor.bind(this);
@@ -77,6 +77,17 @@ class App extends Component {
     }
   }
 
+  toggleAllCountries = (event) => {
+    const allIds = countries.map( country => country.title);
+    const isChecked = event.currentTarget.checked;
+
+    if(isChecked) {
+      this.setState({ selectedCountries : allIds });
+    } else {
+      this.setState({ selectedCountries : [] });
+    }
+  }
+
   generateFiles = () => {
     this.state.selectedCountries.map((value, index) => {
       createPNGFromSVGAndDownload(value, `${value}.${this.state.fileType}`, this.state.fileType, this.state.imgSize, this.state.imgSize);
@@ -106,8 +117,7 @@ class App extends Component {
   render(){
     const { selectedImgSize } = this.state;
     const { selectedFileType } = this.state;
-
-
+    console.log('selectedCountries', this.state.selectedCountries);
 
     //parse string into xml (html) for react
     const parsedCountryArray = countries.map((element, index) => {
@@ -120,33 +130,55 @@ class App extends Component {
 
     return (
       <div className="App">
-      <div className="container">
-      <h1>Countries</h1>
-      <SearchBar
-      query={this.query}
-      value={this.state.query}
-      />
-      <Select
-      value={selectedFileType}
-      onChange={this.changeFileType}
-      options={fileOptions}
-      />
-      <Select
-      value={selectedImgSize}
-      onChange={this.changeSvgSize}
-      options={sizeOptions}
-      />
-
-      {parsedCountryArray.filter(country => country.title.includes(this.state.query)).map((item, key) => (
-        <div className="countryContainer" id={item.title} onClick={this.selectCountry} key={item.id}>{item.data[0]}</div>
-      ))}
-      {/* <CountryImage selectedColor={this.state.color} selectCountry={this.selectCountry} /> */}
-      <ColorPicker updateColor={this.updateColor} />
-
-      <button onClick={this.generateFiles}>
-      download
-      </button>
-      </div>
+        <div className="container">
+          <div className="leftContainer">
+            <div className="searchBlock">
+              <h1>Countries</h1>
+              <SearchBar
+                query={this.query}
+                value={this.state.query}
+              />
+            </div>
+            <label>
+              <input
+                name="selectAllCountries"
+                type="checkbox"
+                onChange={this.toggleAllCountries}
+              />
+              Select all
+            </label>
+            <div className="countryBlock">
+              {parsedCountryArray.filter(country => country.title.includes(this.state.query)).map((item, key) => (
+                <div 
+                  className={"countryContainer " + (this.state.selectedCountries.indexOf(item.title) > -1 ? 'checked' : '')}
+                  id={item.title} 
+                  onClick={this.selectCountry} 
+                  key={item.id}
+                >
+                  <img className="checked" src={checkCircle} alt="checked" />
+                  {item.data[0]}
+                  <p className="countryName">{item.title}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="optionsBlock">
+            <ColorPicker updateColor={this.updateColor} />
+            <Select
+              value={selectedFileType}
+              onChange={this.changeFileType}
+              options={fileOptions}
+            />
+            <Select
+              value={selectedImgSize}
+              onChange={this.changeSvgSize}
+              options={sizeOptions}
+            />
+            <button onClick={this.generateFiles}>
+              download
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
