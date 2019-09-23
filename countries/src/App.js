@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 import ColorPicker from './components/ColorPicker/ColorPicker';
+import Button from './components/Button/Button';
 import SearchBar from './components/SearchBar/SearchBar';
 import CheckBox from './components/CheckBox/CheckBox';
 import ReactHtmlParser, { convertNodeToElement } from 'react-html-parser';
@@ -10,12 +11,12 @@ import checkCircle from './images/check-circle.svg';
 import './styles/App.scss';
 
 const sizeOptions = [
-  { value: 25, label: 25 },
-  { value: 50, label: 50 },
-  { value: 100, label: 100 },
-  { value: 150, label: 150 },
-  { value: 250, label: 250 },
-  { value: 500, label: 500 },
+  { value: 25, label: '25 x 25' },
+  { value: 50, label: '50 x 50' },
+  { value: 100, label: '100 x 100' },
+  { value: 150, label: '150 x 150' },
+  { value: 250, label: '250 x 250' },
+  { value: 500, label: '500 x 500'},
 ];
 
 const fileOptions = [
@@ -61,7 +62,6 @@ class App extends Component {
 
   query(event) {
     this.setState( { query : event.target.value } );
-    console.log('event', event);
   }
 
   selectCountry = (event) => {
@@ -127,6 +127,7 @@ class App extends Component {
       return newElement;
     });
 
+
     return (
       <div className="App">
         <div className="container">
@@ -149,7 +150,7 @@ class App extends Component {
               </label>
             </div>
             <div className="countryBlock">
-              {parsedCountryArray.filter(country => country.title.includes(this.state.query)).map((item, key) => (
+              {parsedCountryArray.filter(country => country.title.toLowerCase().includes(this.state.query.toLowerCase())).map((item, key) => (
                 <div 
                   className={"countryContainer " + (this.state.selectedCountries.indexOf(item.title) > -1 ? 'checked' : '')}
                   id={item.title} 
@@ -164,20 +165,33 @@ class App extends Component {
             </div>
           </div>
           <div className="optionsBlock">
+            <h3>Download</h3>
             <ColorPicker updateColor={this.updateColor} />
-            <Select
-              value={selectedFileType}
-              onChange={this.changeFileType}
-              options={fileOptions}
+            <div class="selectContainer">
+              <Select
+                value={selectedFileType}
+                onChange={this.changeFileType}
+                options={fileOptions}
+                className="selectItem"
+                styles={{indicatorSeparator: () => ({display: 'none'})}}
+              />
+              <label>File Type</label>
+            </div>
+            <div class="selectContainer">
+              <Select
+                value={selectedImgSize}
+                onChange={this.changeSvgSize}
+                options={sizeOptions}
+                className="selectItem"
+                styles={{indicatorSeparator: () => ({display: 'none'})}}
+              />
+              <label>Size (px)</label>
+            </div>
+            <Button 
+              text='Download' 
+              type='submit' 
+              onClick={this.generateFiles} 
             />
-            <Select
-              value={selectedImgSize}
-              onChange={this.changeSvgSize}
-              options={sizeOptions}
-            />
-            <button onClick={this.generateFiles}>
-              download
-            </button>
           </div>
         </div>
       </div>

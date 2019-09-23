@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { ChromePicker } from 'react-color';
+import './ColorPicker.scss';
 
 
 class ColorPicker extends Component {
@@ -54,16 +55,24 @@ class ColorPicker extends Component {
   render() {
     return (
       <div ref={this.setWrapperRef}>
-        <input
-          readOnly
-          className="color-picker-text"
-          type="text"
-          name="color-picker-text"
-          value={this.state.changeColor}
-          style={{backgroundColor: this.state.changeColor}}
+        <div 
+          className="colorInputContainer" 
           onClick={this.handleShowColorPicker}
-        />
-        <div className="color-picker-palette">
+        >
+          <div 
+            className="colorRect"          
+            style={{backgroundColor: this.state.changeColor }}
+          ></div>
+          <input
+            readOnly
+            className="colorText"
+            type="text"
+            name="color-picker-text"
+            value={this.state.changeColor}
+            
+          />
+        </div>
+        <div className="colorPickerPalette">
             {
               this.state.displayColorPicker &&
               <ChromePicker

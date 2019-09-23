@@ -1,0 +1,27 @@
+@import "../../styles/base/colors";
+
+.button {
+	text-decoration: none;
+	padding: 14px 16px;
+	font-size: 16px;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.075rem;
+    line-height: 100%;
+    transition: all 0.2s;
+    border: none;
+    border-radius: 2px;
+    display: block;
+    color: white;
+    background-color: $black;
+    white-space: normal;
+    width: 100%;
+    margin-top: 30px;
+    &:hover, &:active, &:focus {
+    	background-color: #000;
+    	box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
+    }
+    &:hover {
+    	cursor: pointer;
+    }
+}

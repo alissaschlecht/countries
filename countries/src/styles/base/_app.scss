@@ -14,31 +14,10 @@
   	.leftContainer {
   		width: 75%;
   		padding: 20px;
-
+  		padding-right: 100px;
   		.checkBoxContainer {
   			margin-top: 40px;
 		}
-		// .checkBoxContainer  {
-		// 	display: inline-block;
-		// 	vertical-align: middle;
-		// 	margin-top: 40px;
-		// 	.checkBoxInput  {
-		// 		display: inline-block;
-		// 		vertical-align: middle;
-		// 		.psuedoBox {
-		// 			display: inline-block;
-		// 			width: 20px;
-		// 			height: 20px;
-		// 			border: 1px solid $gray-1;
-		// 			border-radius: 3px;
-		// 			transition: all 150ms;
-		// 		}
-		// 	}
-		// 	span {
-		// 		width: 300px;
-		// 		margin-left: 6px;
-		// 	}
-		// }
   		.countryBlock {
   			display: flex;
   			flex-wrap: wrap;
@@ -95,6 +74,19 @@
   	.optionsBlock {
   		width: 25%;
   		padding: 20px;
+  		margin-top: 50px;
+  		.selectContainer {
+  			display: flex;
+  			vertical-align: center;
+  			align-items: center;
+  			margin: 20px 0;
+  			.selectItem {
+  				width: 120px;
+  			}
+  			label {
+  				margin-left: 10px;
+  			}
+  		}
   	}
   }
 }

@@ -1,0 +1,22 @@
+@import "../../styles/base/colors";
+
+.colorInputContainer {
+	display: flex;
+	.colorRect {
+		width: 120px;
+		height: 38px;
+	}
+	.colorText {
+		border: none;
+		height: 38px;
+		border-bottom: 1px solid $gray-1;
+		margin-left: 10px;
+		width: calc(100% - 140px);
+		overflow: hidden;
+	}
+}
+
+.colorPickerPalette {
+	position: absolute;
+	z-index: 99;
+}
