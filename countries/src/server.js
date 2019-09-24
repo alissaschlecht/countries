@@ -12,6 +12,8 @@ fs.readdir(fileDir, function(err, filenames) {
 
   let arr = [];
   let i = 1;
+
+  //remove hidden files from country file list
   list = filenames.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
 
   list.map(function(filename) {
@@ -20,8 +22,9 @@ fs.readdir(fileDir, function(err, filenames) {
         console.log(err)
         return;
       }
-      let obj = {};
 
+      //log each country as an object
+      let obj = {};
       obj.id = i++;
       obj.title = filename.replace(/.svg/, '').replace(/([A-Z])/g, ' $1').trim();
       obj.data = content.replace(/<title>[\s\S]*?<\/title>/, '');
