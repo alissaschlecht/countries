@@ -41,8 +41,9 @@ export default function createPNGFromSVGAndDownload(svgElement, imgName, fileTyp
     canvas.height = height;
 
     img.onload = function () {
-      console.log('onload is working');
-      ctx.drawImage(img, 0, 0, imgPreview.clientWidth, imgPreview.clientHeight, 0, 0, width, height);
+      console.log('imgPreview.clientWidth', imgPreview.clientWidth);
+      console.log('height', height);
+      ctx.drawImage(img, 0, 0, width, height, 0, 0, width, height);
       DOMURL.revokeObjectURL(url);
 
       const imgURI = canvas
