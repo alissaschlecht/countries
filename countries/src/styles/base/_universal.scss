@@ -1,0 +1,22 @@
+.d-none {
+  display: none;
+}
+
+.d-tablet-block {
+  @include tablet {
+    display: block;
+  }
+}
+
+.d-desktop-block {
+  @include desktop {
+    display: block;
+  }
+}
+
+
+.d-desktop-none {
+  @include desktop {
+    display: none;
+  }
+}

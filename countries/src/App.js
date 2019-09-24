@@ -127,8 +127,8 @@ class App extends Component {
       return newElement;
     });
 
-    console.log('parsedCountryArray', parsedCountryArray);
-    console.log('selectedCountries', this.state.selectedCountries);
+    // console.log('parsedCountryArray', parsedCountryArray);
+    // console.log('selectedCountries', this.state.selectedCountries);
 
 
     return (
@@ -152,6 +152,35 @@ class App extends Component {
                 <span>Select all</span>
               </label>
             </div>
+            <div className="optionsBlock d-desktop-none">
+              <h3>Download</h3>
+              <ColorPicker updateColor={this.updateColor} />
+              <div className="selectContainer">
+                <Select
+                  value={selectedFileType}
+                  onChange={this.changeFileType}
+                  options={fileOptions}
+                  className="selectItem"
+                  styles={{indicatorSeparator: () => ({display: 'none'})}}
+                />
+                <label>File Type</label>
+              </div>
+              <div className="selectContainer">
+                <Select
+                  value={selectedImgSize}
+                  onChange={this.changeSvgSize}
+                  options={sizeOptions}
+                  className="selectItem"
+                  styles={{indicatorSeparator: () => ({display: 'none'})}}
+                />
+                <label>Size (px)</label>
+              </div>
+              <Button
+                text='Download'
+                type='submit'
+                onClick={this.generateFiles}
+              />
+            </div>
             <div className="countryBlock">
               {parsedCountryArray.filter(country => country.title.toLowerCase().includes(this.state.query.toLowerCase())).map((item, key) => (
                 <div
@@ -162,39 +191,42 @@ class App extends Component {
                 >
                   <img className="checked" src={checkCircle} alt="checked" />
                   {item.data[0]}
+                  {console.log(item)}
                   <p className="countryName">{item.title}</p>
                 </div>
               ))}
             </div>
           </div>
-          <div className="optionsBlock">
-            <h3>Download</h3>
-            <ColorPicker updateColor={this.updateColor} />
-            <div className="selectContainer">
-              <Select
-                value={selectedFileType}
-                onChange={this.changeFileType}
-                options={fileOptions}
-                className="selectItem"
-                styles={{indicatorSeparator: () => ({display: 'none'})}}
+          <div className="optionsBlock d-none d-desktop-block">
+            <div className="fixedContainer">
+              <h3>Download</h3>
+              <ColorPicker updateColor={this.updateColor} />
+              <div className="selectContainer">
+                <Select
+                  value={selectedFileType}
+                  onChange={this.changeFileType}
+                  options={fileOptions}
+                  className="selectItem"
+                  styles={{indicatorSeparator: () => ({display: 'none'})}}
+                />
+                <label>File Type</label>
+              </div>
+              <div className="selectContainer">
+                <Select
+                  value={selectedImgSize}
+                  onChange={this.changeSvgSize}
+                  options={sizeOptions}
+                  className="selectItem"
+                  styles={{indicatorSeparator: () => ({display: 'none'})}}
+                />
+                <label>Size (px)</label>
+              </div>
+              <Button
+                text='Download'
+                type='submit'
+                onClick={this.generateFiles}
               />
-              <label>File Type</label>
             </div>
-            <div className="selectContainer">
-              <Select
-                value={selectedImgSize}
-                onChange={this.changeSvgSize}
-                options={sizeOptions}
-                className="selectItem"
-                styles={{indicatorSeparator: () => ({display: 'none'})}}
-              />
-              <label>Size (px)</label>
-            </div>
-            <Button
-              text='Download'
-              type='submit'
-              onClick={this.generateFiles}
-            />
           </div>
         </div>
       </div>
