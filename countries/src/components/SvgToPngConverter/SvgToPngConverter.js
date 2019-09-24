@@ -1,9 +1,7 @@
 
 export default function createPNGFromSVGAndDownload(svgElement, imgName, fileType, width, height) {
-  console.log('svgElement', document.getElementById(svgElement).childNodes[0].childNodes[0]);
   //needed for both svg & png
   const data = (new XMLSerializer()).serializeToString(document.getElementById(svgElement).childNodes[0].childNodes[0]);
-  // console.log(data);
   const svgBlob = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
   const DOMURL = window.URL || window.webkitURL || window;
   const url = DOMURL.createObjectURL(svgBlob);
@@ -16,7 +14,6 @@ export default function createPNGFromSVGAndDownload(svgElement, imgName, fileTyp
       cancelable: true
     });
 
-    console.log('i should be downloading');
     const a = document.createElement('a');
     a.setAttribute('download', imgName);
     a.setAttribute('href', imgURI);
@@ -26,7 +23,6 @@ export default function createPNGFromSVGAndDownload(svgElement, imgName, fileTyp
 
   //create canvas and draw png, then download
   if(fileType === 'PNG') {
-    console.log('png');
     const canvas = document.createElement('canvas');
     const imgPreview = document.createElement('img');
     imgPreview.style = "position: absolute; top: -99999px";
@@ -34,15 +30,11 @@ export default function createPNGFromSVGAndDownload(svgElement, imgName, fileTyp
     const ctx = canvas.getContext('2d');
     const img = new Image();
     img.src = url;
-    console.log('img.src', img.src);
-    console.log('img', img);
 
     canvas.width = width;
     canvas.height = height;
 
     img.onload = function () {
-      console.log('imgPreview.clientWidth', imgPreview.clientWidth);
-      console.log('height', height);
       ctx.drawImage(img, 0, 0, width, height, 0, 0, width, height);
       DOMURL.revokeObjectURL(url);
 
@@ -56,7 +48,6 @@ export default function createPNGFromSVGAndDownload(svgElement, imgName, fileTyp
 
     imgPreview.src = url;
   } else {
-    console.log('should download SVG');
     //just download for svg with url blob
     downloadImagesEvent(url);
   }

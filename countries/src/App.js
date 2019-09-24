@@ -40,7 +40,6 @@ class App extends Component {
     this.changeFileType = this.changeFileType.bind(this);
     this.selectCountry = this.selectCountry.bind(this);
     this.query = this.query.bind(this);
-    this.transform = this.transform.bind(this);
   }
 
   changeSvgSize = selectedImgSize => {
@@ -89,32 +88,9 @@ class App extends Component {
 
   generateFiles = () => {
     this.state.selectedCountries.map((value, index) => {
-      console.log('value', value);
       createPNGFromSVGAndDownload(value, `${value}.${this.state.fileType}`, this.state.fileType, this.state.imgSize, this.state.imgSize);
       return null;
     });
-    console.log('generated files');
-  }
-
-  //make sure svg props are correct syntax
-  transform = (node, index) => {
-    if (node.type === 'tag' && node.name === 'svg') {
-      const child = node.children[0];
-      // const children = node.children[0];
-      console.log(node.children[0]);
-      const { width, height, viewbox, preserveaspectratio } = node.attribs;
-      return (
-        <svg
-        key={index}
-        width={width}
-        height={height}
-        viewBox={viewbox}
-        preserveAspectRatio={preserveaspectratio}
-        >
-        {convertNodeToElement(child, index, this.transform)}
-        </svg>
-      );
-    }
   }
 
   render(){
@@ -126,8 +102,6 @@ class App extends Component {
       const newElement = {
         ...element,
         data: <div dangerouslySetInnerHTML={{ __html: "<div>hello</div>" }} />
-        // data: <div dangerouslySetInnerHTML={{ __html: element }} />
-        // data: ReactHtmlParser(element.data, { transform: this.transform })
       }
       return newElement;
     });
