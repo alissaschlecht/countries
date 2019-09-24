@@ -89,6 +89,7 @@ class App extends Component {
 
   generateFiles = () => {
     this.state.selectedCountries.map((value, index) => {
+      console.log('value', value);
       createPNGFromSVGAndDownload(value, `${value}.${this.state.fileType}`, this.state.fileType, this.state.imgSize, this.state.imgSize);
       return null;
     });
@@ -99,6 +100,8 @@ class App extends Component {
   transform = (node, index) => {
     if (node.type === 'tag' && node.name === 'svg') {
       const child = node.children[0];
+      // const children = node.children[0];
+      console.log(node.children[0]);
       const { width, height, viewbox, preserveaspectratio } = node.attribs;
       return (
         <svg
@@ -122,14 +125,12 @@ class App extends Component {
     const parsedCountryArray = countries.map((element, index) => {
       const newElement = {
         ...element,
-        data: ReactHtmlParser(element.data, { transform: this.transform })
+        data: <div dangerouslySetInnerHTML={{ __html: "<div>hello</div>" }} />
+        // data: <div dangerouslySetInnerHTML={{ __html: element }} />
+        // data: ReactHtmlParser(element.data, { transform: this.transform })
       }
       return newElement;
     });
-
-    // console.log('parsedCountryArray', parsedCountryArray);
-    // console.log('selectedCountries', this.state.selectedCountries);
-
 
     return (
       <div className="App">
@@ -182,16 +183,15 @@ class App extends Component {
               />
             </div>
             <div className="countryBlock">
-              {parsedCountryArray.filter(country => country.title.toLowerCase().includes(this.state.query.toLowerCase())).map((item, key) => (
+              {countries.filter(country => country.title.toLowerCase().includes(this.state.query.toLowerCase())).map((item, key) => (
                 <div
                   className={"countryContainer " + (this.state.selectedCountries.indexOf(item.title) > -1 ? 'checked' : '')}
                   id={item.title}
                   onClick={this.selectCountry}
                   key={item.id}
                 >
+                  <div className="svgContainer" dangerouslySetInnerHTML={{ __html: item.data }} />
                   <img className="checked" src={checkCircle} alt="checked" />
-                  {item.data[0]}
-                  {console.log(item)}
                   <p className="countryName">{item.title}</p>
                 </div>
               ))}

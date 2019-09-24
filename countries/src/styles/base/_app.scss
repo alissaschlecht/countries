@@ -68,9 +68,12 @@
                         width: 100%;
                         text-transform: uppercase;
                     }
+                    .svgContainer {
+                      width: 70%;
+                      height: auto;
+                    }
                     svg {
-                        width: 70%;
-                        height: auto;
+
                     }
                     .checked {
                         position: absolute;
