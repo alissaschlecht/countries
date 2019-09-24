@@ -92,6 +92,7 @@ class App extends Component {
       createPNGFromSVGAndDownload(value, `${value}.${this.state.fileType}`, this.state.fileType, this.state.imgSize, this.state.imgSize);
       return null;
     });
+    console.log('generated files');
   }
 
   //make sure svg props are correct syntax
@@ -126,6 +127,9 @@ class App extends Component {
       return newElement;
     });
 
+    console.log('parsedCountryArray', parsedCountryArray);
+    console.log('selectedCountries', this.state.selectedCountries);
+
 
     return (
       <div className="App">
@@ -150,10 +154,10 @@ class App extends Component {
             </div>
             <div className="countryBlock">
               {parsedCountryArray.filter(country => country.title.toLowerCase().includes(this.state.query.toLowerCase())).map((item, key) => (
-                <div 
+                <div
                   className={"countryContainer " + (this.state.selectedCountries.indexOf(item.title) > -1 ? 'checked' : '')}
-                  id={item.title} 
-                  onClick={this.selectCountry} 
+                  id={item.title}
+                  onClick={this.selectCountry}
                   key={item.id}
                 >
                   <img className="checked" src={checkCircle} alt="checked" />
@@ -186,10 +190,10 @@ class App extends Component {
               />
               <label>Size (px)</label>
             </div>
-            <Button 
-              text='Download' 
-              type='submit' 
-              onClick={this.generateFiles} 
+            <Button
+              text='Download'
+              type='submit'
+              onClick={this.generateFiles}
             />
           </div>
         </div>
