@@ -1,3 +1,6 @@
+html {
+    background-color: #fefefe;
+}
 .App {
     width: 100%;
     * {
@@ -19,6 +22,9 @@
             }
             .checkBoxContainer {
                 margin-top: 40px;
+                .hidden {
+                    display: none;
+                }
             }
             .countryBlock {
                 display: flex;
@@ -33,6 +39,7 @@
                     @include desktop {
                         width: calc(33% - 20px);
                     }
+                    background-color: white;
                     margin: 10px;
                     padding-top: 20px;
                     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
@@ -111,5 +118,12 @@
                 }
             }
         }
+    }
+    footer {
+        font-size: .9rem;
+        text-align: center;
+        padding: 10px;
+        margin-bottom: 20px;
+        color: $black;
     }
 }

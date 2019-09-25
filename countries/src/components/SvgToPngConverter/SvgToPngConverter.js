@@ -1,7 +1,8 @@
 
 export default function createPNGFromSVGAndDownload(svgElement, imgName, fileType, width, height) {
+
   //needed for both svg & png
-  const data = (new XMLSerializer()).serializeToString(document.getElementById(svgElement).childNodes[0].childNodes[0]);
+  const data = (new XMLSerializer()).serializeToString(svgElement);
   const svgBlob = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
   const DOMURL = window.URL || window.webkitURL || window;
   const url = DOMURL.createObjectURL(svgBlob);

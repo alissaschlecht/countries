@@ -4,7 +4,6 @@ import ColorPicker from './components/ColorPicker/ColorPicker';
 import Button from './components/Button/Button';
 import SearchBar from './components/SearchBar/SearchBar';
 import CheckBox from './components/CheckBox/CheckBox';
-import ReactHtmlParser, { convertNodeToElement } from 'react-html-parser';
 import createPNGFromSVGAndDownload from './components/SvgToPngConverter/SvgToPngConverter';
 import countries from './components/CountryImage/Countries';
 import checkCircle from './images/check-circle.svg';
@@ -17,11 +16,12 @@ const sizeOptions = [
   { value: 150, label: '150 x 150' },
   { value: 250, label: '250 x 250' },
   { value: 500, label: '500 x 500'},
+  { value: 1000, label: '1000 x 1000'},
 ];
 
 const fileOptions = [
-  { value: 'PNG', label: 'PNG' },
   { value: 'SVG', label: 'SVG' },
+  { value: 'PNG', label: 'PNG' },
 ];
 
 class App extends Component {
@@ -64,68 +64,78 @@ class App extends Component {
   }
 
   selectCountry = (event) => {
-    let ids = this.state.selectedCountries;
-    let clickedCountry = event.currentTarget.id;
-    let index = ids.indexOf(clickedCountry);
+    let selected = this.state.selectedCountries;
+    let elementId = event.currentTarget.id;
+    let element = event.currentTarget.childNodes[0].childNodes[0];
+    let elementObj = {id: elementId, svg: element};
+    let index = selected.indexOfObject("id", elementId);
 
     if(index === -1){
-      this.setState({selectedCountries : ids.concat([clickedCountry])});
+      this.setState({selectedCountries : selected.concat([elementObj])});
     } else {
-      this.setState({selectedCountries: ids.filter(id => id !== clickedCountry) });
+      console.log('selected', selected);
+      this.setState({selectedCountries: selected.filter( el => el.id !== elementId) });
     }
   }
 
   toggleAllCountries = (event) => {
-    const allIds = countries.map( country => country.title);
+    const countryContainer = document.getElementsByClassName("countryContainer");
     const isChecked = event.currentTarget.checked;
+    const allCountries = Array.from(countryContainer).map((country) => {
+      return {
+        id: country.id,
+        svg: country.childNodes[0].childNodes[0]
+      };
+    });
 
     if(isChecked) {
-      this.setState({ selectedCountries : allIds });
+      this.setState({ selectedCountries : allCountries });
     } else {
       this.setState({ selectedCountries : [] });
     }
   }
 
   generateFiles = () => {
-    this.state.selectedCountries.map((value, index) => {
-      createPNGFromSVGAndDownload(value, `${value}.${this.state.fileType}`, this.state.fileType, this.state.imgSize, this.state.imgSize);
+    this.state.selectedCountries.map((country, index) => {
+      createPNGFromSVGAndDownload(country.svg, `${country.id}.${this.state.fileType}`, this.state.fileType, this.state.imgSize, this.state.imgSize);
       return null;
     });
   }
 
   render(){
-    const { selectedImgSize } = this.state;
-    const { selectedFileType } = this.state;
-
-    //parse string into xml (html) for react
-    const parsedCountryArray = countries.map((element, index) => {
-      const newElement = {
-        ...element,
-        data: <div dangerouslySetInnerHTML={{ __html: "<div>hello</div>" }} />
+    const { selectedImgSize, selectedFileType } = this.state;
+    console.log('selectedCountries', this.state.selectedCountries);
+    //loop to look for object id in selected array
+    Array.prototype.indexOfObject = function (property, value) {
+      for (var i = 0, len = this.length; i < len; i++) {
+          if (this[i][property] === value) return i;
       }
-      return newElement;
-    });
+      return -1;
+    }
 
     return (
       <div className="App">
         <div className="container">
           <div className="leftContainer">
             <div className="searchBlock">
-              <h1>Countries</h1>
+              <h1>Hand drawn variable width country shapes</h1>
+              <p>Variable width country shapes, *pretty* close to the correct shapes. Open source. Download ready-to-use assets in PNG or SVG, or download the <a href="">Adobe Illustrator source file</a> to modify as you wish. Please open source credit to Alissa Schlecht.</p>
               <SearchBar
                 query={this.query}
                 value={this.state.query}
               />
             </div>
             <div className="checkBoxContainer">
-              <label >
-                <CheckBox
-                  name="selectAllCountries"
-                  type="checkbox"
-                  onChange={this.toggleAllCountries}
-                />
-                <span>Select all</span>
-              </label>
+              <div className={this.state.query === '' ? '' : 'hidden'}>
+                <label >
+                  <CheckBox
+                    name="selectAllCountries"
+                    type="checkbox"
+                    onChange={this.toggleAllCountries} 
+                  />
+                  <span>Select all</span>
+                </label>
+              </div>
             </div>
             <div className="optionsBlock d-desktop-none">
               <h3>Download</h3>
@@ -159,7 +169,7 @@ class App extends Component {
             <div className="countryBlock">
               {countries.filter(country => country.title.toLowerCase().includes(this.state.query.toLowerCase())).map((item, key) => (
                 <div
-                  className={"countryContainer " + (this.state.selectedCountries.indexOf(item.title) > -1 ? 'checked' : '')}
+                  className={"countryContainer " + (this.state.selectedCountries.indexOfObject("id", item.title) > -1 ? 'checked' : '')}
                   id={item.title}
                   onClick={this.selectCountry}
                   key={item.id}
@@ -180,6 +190,7 @@ class App extends Component {
                   value={selectedFileType}
                   onChange={this.changeFileType}
                   options={fileOptions}
+                  placeholder="SVG"
                   className="selectItem"
                   styles={{indicatorSeparator: () => ({display: 'none'})}}
                 />
@@ -191,6 +202,7 @@ class App extends Component {
                   onChange={this.changeSvgSize}
                   options={sizeOptions}
                   className="selectItem"
+                  isDisabled={this.state.fileType === 'SVG' ? true : false }
                   styles={{indicatorSeparator: () => ({display: 'none'})}}
                 />
                 <label>Size (px)</label>
@@ -203,6 +215,7 @@ class App extends Component {
             </div>
           </div>
         </div>
+        <footer>Copyright 2019 Alissa Schlecht</footer>
       </div>
     );
   }
