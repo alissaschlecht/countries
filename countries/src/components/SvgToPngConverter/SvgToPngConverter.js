@@ -31,6 +31,10 @@ export default function createPNGFromSVGAndDownload(svgElement, imgName, fileTyp
     const img = new Image();
     img.src = url;
 
+    const scale = 3;
+    width = width * scale;
+    height = height * scale;
+
     canvas.width = width;
     canvas.height = height;
 
