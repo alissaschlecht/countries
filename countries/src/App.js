@@ -25,9 +25,9 @@ const fileOptions = [
 ];
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+  // constructor(props) {
+  //   super(props);
+    state = {
       imgSize: 200,
       fileType: 'SVG',
       color: "#333333",
@@ -35,12 +35,12 @@ class App extends Component {
       selectedCountries: []
     }
 
-    this.updateColor = this.updateColor.bind(this);
-    this.changeSvgSize = this.changeSvgSize.bind(this);
-    this.changeFileType = this.changeFileType.bind(this);
-    this.selectCountry = this.selectCountry.bind(this);
-    this.query = this.query.bind(this);
-  }
+  //   this.updateColor = this.updateColor.bind(this);
+  //   this.changeSvgSize = this.changeSvgSize.bind(this);
+  //   this.changeFileType = this.changeFileType.bind(this);
+  //   this.selectCountry = this.selectCountry.bind(this);
+  //   this.query = this.query.bind(this);
+  // }
 
   changeSvgSize = selectedImgSize => {
     this.setState({ imgSize: selectedImgSize.value });
@@ -54,7 +54,7 @@ class App extends Component {
     this.setState({
       color: color
     });
-    const svgCollection = document.querySelectorAll(".countryContainer svg");
+    const svgCollection = document.querySelectorAll(".countryContainer .svgContainer svg");
     const svgArray = Array.from(svgCollection);
     return svgArray.map(svg => svg.setAttribute("fill", this.state.color));
   }
