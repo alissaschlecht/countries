@@ -25,22 +25,14 @@ const fileOptions = [
 ];
 
 class App extends Component {
-  // constructor(props) {
-  //   super(props);
-    state = {
-      imgSize: 200,
-      fileType: 'SVG',
-      color: "#333333",
-      query: '',
-      selectedCountries: []
-    }
 
-  //   this.updateColor = this.updateColor.bind(this);
-  //   this.changeSvgSize = this.changeSvgSize.bind(this);
-  //   this.changeFileType = this.changeFileType.bind(this);
-  //   this.selectCountry = this.selectCountry.bind(this);
-  //   this.query = this.query.bind(this);
-  // }
+  state = {
+    imgSize: 200,
+    fileType: 'SVG',
+    color: "#333333",
+    query: '',
+    selectedCountries: []
+  }
 
   changeSvgSize = selectedImgSize => {
     this.setState({ imgSize: selectedImgSize.value });
@@ -118,8 +110,8 @@ class App extends Component {
         <div className="container">
           <div className="leftContainer">
             <div className="searchBlock">
-              <h1>Hand drawn variable width country shapes</h1>
-              <p>Variable width country shapes, *pretty* close to the correct shapes. Open source. Download ready-to-use assets in PNG or SVG, or download the <a href="">Adobe Illustrator source file</a> to modify as you wish. Please open source credit to Alissa Schlecht.</p>
+              <h1>Downloadable Country Shapes</h1>
+              <p>Choose your countries and download in SVG or PNG in your preferred color and size</p>
               <SearchBar
                 query={this.query}
                 value={this.state.query}
@@ -131,7 +123,7 @@ class App extends Component {
                   <CheckBox
                     name="selectAllCountries"
                     type="checkbox"
-                    onChange={this.toggleAllCountries} 
+                    onChange={this.toggleAllCountries}
                   />
                   <span>Select all</span>
                 </label>
@@ -215,7 +207,16 @@ class App extends Component {
             </div>
           </div>
         </div>
-        <footer>Copyright 2019 Alissa Schlecht</footer>
+        <footer>
+          Made open source
+          <span
+            className="footerLink"
+            onClick={ () => {
+              window.open("https://www.alissa-schlecht.com")
+            }}>
+            in Toronto
+          </span>
+          </footer>
       </div>
     );
   }

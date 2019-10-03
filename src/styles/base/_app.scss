@@ -125,5 +125,12 @@ html {
         padding: 10px;
         margin-bottom: 20px;
         color: $black;
+        .footerLink {
+          cursor: pointer;
+          color: $gray-1;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
     }
 }
