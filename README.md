@@ -1,6 +1,4 @@
 Open source country outlines. Source files made in illustrator, downloadable in SVG or PNG. 
-
-<br>
 <br>
 See it live at 
 
